@@ -20,8 +20,8 @@ Info: MID 140173 Custom Log Entry: MF-PDFSuspKeys: 'sample1-6a06f.pdf, /OpenActi
 ```
 
 
-## MF_PDFSuspKeysRules
----
+## PDFSuspKeysRules
+
 
 Here is more comprehensive version that includes combination of lateral and  hexadecimal representation of characters. Each PDF keyword is evaluated in seperate condition. It inserts a custom header with the value of keyword it matches. This can be further used to build a score-based filter. 
 
@@ -91,8 +91,8 @@ obj 7 0
  Info: MID 140591 Custom Log Entry: MF-PDFSuspKeys:K2: 'smpl1.pdf, /#4Fpen#41ction, /J#61v#61Script' key found!
 ```
 
-## MF_PDFSuspKeysActions
----
+## PDFSuspKeysActions
+
 
 The Actions filter uses the same threshold scoring system as introduced in [ScoringFilters](../ScoringFilters.md) document. 
 
@@ -142,7 +142,7 @@ MF_PDFSuspKeyActions: if (attachment-filename == "(?i)\\.(pdf)$" OR attachment-f
 ```
 
 
-> sample: `smpl1.pdf`
+- sample: `smpl1.pdf`
 
 ```log 
  Info: MID 140592 Custom Log Entry: MF-PDFSuspKeys:K1: 'smpl1.pdf, /#4Fpen#41ction' key found!
@@ -150,7 +150,7 @@ MF_PDFSuspKeyActions: if (attachment-filename == "(?i)\\.(pdf)$" OR attachment-f
  Info: MID 140592 Custom Log Entry: MF-PDFSuspKeys: Got 3 or more points for having susp PDF keys:  ighly Suspicious > Quarantine
  ```
 
-> sample: `mlwr.pdf`
+- sample: `mlwr.pdf`
 
 ```log
 Info: MID 140594 Custom Log Entry: MF-PDFSuspKeys:K1: 'mlwr.pdf, /OpenAction' key found!
