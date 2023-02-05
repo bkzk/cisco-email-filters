@@ -74,41 +74,41 @@ This filter is built for demonstration purposes.  For prod, it may be a better i
 MF_MacroIOCRules: if (attachment-filename == "(?i)\\.(xls|doc|ppt|xlsx|xlsm|xltm|xlsb|docx|docm|dotm|pptx|ppam|pptm|potm|ppsm|slk)$"){
     if  (attachment-binary-contains("(?i)vba(6|7|Proj)") AND attachment-binary-contains("(?i)versioncompatible32") ) {
         log-entry("MF-MacroIOC: OLE VBA Macro indicator: $MatchedContent found. IOCPoints: 2p");
-        insert-header("X-MacroIOC", "VBAKeywordClass2");
+        insert-header("X-MacroIOC", "MacroKeyClass2");
     }
     else{
         if (attachment-binary-contains("(?i)/VBAProject\\.bin")){
             log-entry("MF-MacroIOC: OOXML VBA Macro indicator: '$MatchedContent' found. IOCPoints: 3p");
-            insert-header("X-MacroIOC", "VBAKeywordClass1");
+            insert-header("X-MacroIOC", "MacroKeyClass1");
         }
         else {
-            if  (attachment-binary-contains("(?i)Excel 4.0( Macros)*") OR attachment-binary-contains("(?i)xl/macrosheets") ) {
+            if  (attachment-binary-contains("(?i)Excel 4.0( Macros)?") OR attachment-binary-contains("(?i)xl/macrosheets") ) {
                 log-entry("MF-MacroIOC: XLM - Excel 4.0 Macro indicator: '$MatchedContent' found. IOCPoints: 3p");
-                insert-header("X-MacroIOC", "XLMKeywordClass1");
+                insert-header("X-MacroIOC", "MacroKeyClass1");
             }
         }
     }
-    if (attachment-binary-contains("(?i)(Auto|Document|Workbook)(_)*(Open|Close)")){
+    if (attachment-binary-contains("(?i)(Auto|Document|Workbook)(_)?(Open|Close)")){
         log-entry("MF-MacroIOC: Macro AutoExec keyword '$MatchedContent' found. IOCPoints: 3p");
-        insert-header("X-MacroIOC", "MacroExecKeywordClass1");
+        insert-header("X-MacroIOC", "MacroCallKeyClass1");
     }
     else { 
-        if (attachment-binary-contains("(?i)_*Open\\(\\)*")){
+        if (attachment-binary-contains("(?i)_*Open\\(\\)?")){
             log-entry("MF-MacroIOC: Partial AutoExec keyword: '$MatchedContent' found. IOCPoints: 1p");
-            insert-header("X-MacroIOC","MacroExecKeywordClass3");
+            insert-header("X-MacroIOC","MacroCallKeyClass3");
         }
     }
-    if (attachment-binary-contains("(?i)(cmd\\.exe|winmgmts:|(rundll32|regsvr32|powershell)(\\.exe)*)")){
+    if (attachment-binary-contains("(?i)(cmd\\.exe|winmgmts:|(rundll32|regsvr32|powershell)(\\.exe)?)")){
             log-entry("MF-MacroIOC: Higly suspicious EXEC keyword: '$MatchedContent' found. IOCPoints: 3p");
-            insert-header("X-MacroIOC","MSExecKeywordClass1");
+            insert-header("X-MacroIOC","MacroCallKeyClass1");
     }
-    if (attachment-binary-contains("(?i)(kernel32|user32|advapi32|shell32|RunDll|regsvr32|winsock)(\\.dll)*")){
+    if (attachment-binary-contains("(?i)(kernel32|user32|advapi32|shell32|RunDll|regsvr32|winsock)(\\.dll)?")){
             log-entry("MF-MacroIOC: Higly suspicious DLL keyword: '$MatchedContent' found. IOCPoints: 3p");
-            insert-header("X-MacroIOC","MSDLLKeywordClass1");
+            insert-header("X-MacroIOC","MacroCallKeyClass1");
     }
-    if (attachment-binary-contains("(?i)(wininet|winhttp|urlmon|ntdll|imagehlp)(\\.dll)*")){
+    if (attachment-binary-contains("(?i)(wininet|winhttp|urlmon|ntdll|imagehlp)(\\.dll)?")){
             log-entry("MF-MacroIOC: Suspicious DLL keyword: '$MatchedContent' found. IOCPoints: 2p");
-            insert-header("X-MacroIOC","MSDLLKeywordClass2");
+            insert-header("X-MacroIOC","MacroCallKeyClass2");
     }
 }
 ```
@@ -121,7 +121,6 @@ The filter takes three different decisions based on the minimum threshold value 
 
 ```ruby
 MF_MacroIOCActions: if (attachment-filename == "(?i)\\.(xls|doc|ppt|xlsx|xlsm|xltm|xlsb|docx|docm|dotm|pptx|ppam|pptm|potm|ppsm|slk)$"){
-    # Sum Up
     if (header-dictionary-match ('MACROKEYS', "X-MacroIOC", 5)){
         log-entry("MF-MacroIOC: Got 5 or more points for having susp MACRO keys: Highly Suspicious Macro > Quarantine");
         strip-header ('Subject');
