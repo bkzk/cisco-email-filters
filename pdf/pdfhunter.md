@@ -1,7 +1,6 @@
 # PDFHunter 
 
-As popuplar and widely trusted extension PDF is still on the radar of malicious actors. PDF is feature rich, and well documented format effective to download and execute malware, steal credentials or transport other malicious documents like macro-enabled MS Office files. 
-
+As a popular and widely trusted extension, PDF is still on the radar of malicious actors. PDF is a feature-rich, and well-documented format effective to download and execute malware, steal credentials, or transport other malicious documents like macro-enabled MS Office files.
 
 
 ```ruby
@@ -11,9 +10,9 @@ MF_PDFSuspKeys: if (attachment-filename == "(?i)\\.(pdf)$") AND (attachment-bina
 }
 ```
 
-It's simple to read but has some limitation. First, PDF supports Names Object with hexadecimal or literal characters. This condition operates only on literal characters. Hopefully Names are case-sensitive so we need to cover only one set of characters. Second, it evaluates to true on first match what does not give us a full visibility in logs. 
+It's simple to read but has some limitations. First, PDF supports Names Object with hexadecimal or literal characters. This condition operates only on literal characters. Hopefully, Names are case-sensitive so we need to cover only one set of characters in hex. Second, it evaluates to true on the first match which does not give us full visibility in logs.
 
-The sample below may includes other keywords but the rule stops at first match:
+The sample file that triggers a below log entry might include other keywords but the rule stops at the first match:
 
 ```
 Info: MID 140173 Custom Log Entry: MF-PDFSuspKeys: 'sample1-6a06f.pdf, /OpenAction' string found!
@@ -23,7 +22,7 @@ Info: MID 140173 Custom Log Entry: MF-PDFSuspKeys: 'sample1-6a06f.pdf, /OpenActi
 ## PDFSuspKeysRules
 
 
-Here is more comprehensive version that includes combination of lateral and  hexadecimal representation of characters. Each PDF keyword is evaluated in seperate condition. It inserts a custom header with the value of keyword it matches. This can be further used to build a score-based filter. 
+This is a more comprehensive version that includes a combination of the lateral and hexadecimal representation of characters. Each PDF keyword is evaluated in a separate condition. It inserts a custom header with the value of the keyword it matches. 
 
 ```ruby
 MF_PDFSuspKeysRules: if (attachment-filename == "(?i)\\.(pdf)$" OR attachment-filetype == "pdf") {
@@ -54,12 +53,16 @@ MF_PDFSuspKeysRules: if (attachment-filename == "(?i)\\.(pdf)$" OR attachment-fi
     }
 }
 ```
-It catches Names with lateral or hexadecimal representation of characters and its combinations. 
 
-Note: This filter does not use a complete list of suspicious PDF Names. There is bunch of others that are worth to check. Juts to mention few of them  /GoTo, /GoToR, /GoToE, /URI, or /SubmitForm
+It catches Names with lateral or hexadecimal representations of characters and their combinations.
+
+__Note__: This filter does not use a complete list of suspicious PDF Names. There is a bunch of others that are worth checking. Just to mention a few of them /GoTo, /GoToR, /GoToE, /URI, or /SubmitForm
+
+
+The sample1.pdf is used to demonstrate how hexadecimal character can be used together with literal one. 
 
 ```
-pdf-parser.py sample1.pdf -o1 -w
+pdf-parser.py smpl1.pdf -o1 -w
 obj 1 0
  Type: /Catalog
  Referencing: 2 0 R, 3 0 R, 7 0 R
@@ -73,7 +76,7 @@ obj 1 0
 ```
 
 ```
-pdf-parser.py sample1.pdf -o7 -w
+pdf-parser.py smpl1.pdf -o7 -w
 obj 7 0
  Type: /Action
  Referencing: 8 0 R
@@ -91,12 +94,12 @@ obj 7 0
  Info: MID 140591 Custom Log Entry: MF-PDFSuspKeys:K2: 'smpl1.pdf, /#4Fpen#41ction, /J#61v#61Script' key found!
 ```
 
+This can be further used to build a score-based filter.
+
 ## PDFSuspKeysActions
 
 
 The Actions filter uses the same threshold scoring system as introduced in [ScoringFilters](../ScoringFilters.md) document. 
-
-
 
 For this filter the following Content Dictionary is used: 
 
@@ -141,16 +144,20 @@ MF_PDFSuspKeyActions: if (attachment-filename == "(?i)\\.(pdf)$" OR attachment-f
 }
 ```
 
+These two samples are evaluated first by the __PDFSuspKeysRules__ filter that inserts the header and extra log entry, and then by __PDFSuspKeysActions__ that takes the final decision about the message based on the threshold value set by the `header-dictionary-match()` rule. 
 
-- sample: `smpl1.pdf`
+
+- First sample: `smpl1.pdf`
 
 ```log 
  Info: MID 140592 Custom Log Entry: MF-PDFSuspKeys:K1: 'smpl1.pdf, /#4Fpen#41ction' key found!
  Info: MID 140592 Custom Log Entry: MF-PDFSuspKeys:K2: 'smpl1.pdf, /#4Fpen#41ction, /J#61v#61Script' key found!
- Info: MID 140592 Custom Log Entry: MF-PDFSuspKeys: Got 3 or more points for having susp PDF keys:  ighly Suspicious > Quarantine
+ Info: MID 140592 Custom Log Entry: MF-PDFSuspKeys: Got 3 or more points for having susp PDF keys: Highly Suspicious > Quarantine
  ```
 
-- sample: `mlwr.pdf`
+The filter finds /OpenAction and /JavaScript keywords besides both Names are slightly obfuscated by using hex representation of the character. It's old and common trick to bypass lazy build AV signature. 
+
+- Second sample: `mlwr.pdf`
 
 ```log
 Info: MID 140594 Custom Log Entry: MF-PDFSuspKeys:K1: 'mlwr.pdf, /OpenAction' key found!
@@ -159,4 +166,6 @@ Info: MID 140594 Custom Log Entry: MF-PDF-SuspKeys:K5: 'mlwr.pdf, /OpenAction, /
 Info: MID 140594 Custom Log Entry: MF-PDFSuspKeys:K6: 'mlwr.pdf, /OpenAction, /EmbeddedFile, /AcroForm, /ObjStm' key found!
 Info: MID 140594 Custom Log Entry: MF-PDFSuspKeys: Got 3 or more points for having susp PDF keys:  Highly Suspicious > Quarantine
  ```
-
+ 
+This sample does not include any Javascript code but it includes compressed object names (/ObjStm) and /OpenAction that triggers the form to open /EmbeddedFile on startup.  
+ 
