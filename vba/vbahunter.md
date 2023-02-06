@@ -40,9 +40,42 @@ Info: MID 140465 Custom Log Entry: MF-VBAHunter: OLE VBA Macro indicator: 'vba_m
 Info: MID 140465 Custom Log Entry: MF-VBAHunter: Macro AutoExec keyword 'vba_macro.doc, Attribut\x00e VB_Nam\x00e =, VBA6, VersionCompatible32, Workbook_Open' found!
 ```
 
+## VBA Module 
 
-Each VBA project consists of at least one module, and each module consists of module header and a module body. The module header is a set of attributes that can be coded but mainly it is generated automtically. The module body stores the actual source code. Each module must have name and that name is stored under the `Attribute VB_Name = `.
+Each VBA project consists of at least one module, and each module consists of module header and a module body. The module header is a set of attributes that can be coded but mainly it is generated automtically. The module body stores the actual source code. Each module must have name and that name is stored under the `Attribute VB_Name = ` and so it's a good indicator of the macro to search for.
 
+```
+olevba -c --attr vba_macro.doc
+olevba 0.60.1 on Python 3.8.13 - http://decalage.info/python/oletools
+===============================================================================
+FILE: vba_macro.doc
+Type: OLE
+-------------------------------------------------------------------------------
+VBA MACRO ThisDocument.cls
+in file: vba_macro.doc - OLE stream: 'Macros/VBA/ThisDocument'
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Attribute VB_Name = "ThisDocument"
+Attribute VB_Base = "1Normal.ThisDocument"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = True
+Attribute VB_TemplateDerived = True
+Attribute VB_Customizable = True
+Sub Document_Open()
+
+MsgBox "Hello World", 0, "Run by VBA macro"
+
+End Sub
+
+-------------------------------------------------------------------------------
+VBA MACRO Module1.bas
+in file: vba_macro.doc - OLE stream: 'Macros/VBA/Module1'
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Attribute VB_Name = "Module1"
+```
+
+The "Attribut.e VB_Nam.e" is the one that is easily notable within hex editor. 
 
 ```sh 
 ❯ hexdump -C examples/vba_macro.doc| grep -A2 Attrib
