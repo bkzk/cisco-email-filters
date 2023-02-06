@@ -1,24 +1,12 @@
 # XLMHunter 
 
-This filter looks for indicators of XLM - Excel4.0 Macros inside MS Office documents.
+This filter looks for indicators of XLM - Excel4.0 Macros inside the MS Office documents.
 
-
-The first version of the script looks for `Excel 4.0` string inside OLE-based (CFBF) which often is found as `Excel 4.0 Macros`. Note the word `Macros` here depends on the MS Office default language. With OOXML files the only check that can be done on compressed data is to look for the name of the directory where Excel4.0 macros are stored. With the new format, it is `xl/macrosheet`. 
+The first part of the filter looks for `Excel 4.0` string inside OLE-based (CFBF) documents. It is usually found as `Excel 4.0 Macros`, but note the word `Macros` here depends on the MS Office language used to create the document. With the OOXML files, the only check that can be done on compressed data is to look for the name of the directory where Excel4.0 macros are stored. With the new format, it is `xl/macrosheet`. 
 
 Note: Both names are a subject of obfuscation. 
 
-
-```ruby
-MF_XLMHunter: if (attachment-filename == "(?i)\\.(xls|doc|ppt|xlsx|xlsm|xltm|xlsb|docx|docm|dotm|pptx|ppam|pptm|potm|ppsm|slk)$") {
-    ## XLM String indicators
-    if ( attachment-binary-contains("(?i)Excel 4.0( Macros)*") OR attachment-binary-contains("(?i)xl/macrosheets") ) {
-        log-entry("MF_XLMHunter: Excel4.0 Macro indicator: '$MatchedContent' found!");
-    }
-}
-```
-
-
-XLM macros are stored with cells inside the worksheet. This worksheet is usually set with `hidden` or `veryhidden` attribute. The next version of the filter is looking for worksheets with these hidden attributes. 
+The XLM macros are stored with cells inside the worksheet. This worksheet is usually set with `hidden` or `veryhidden` attribute. From the detection point of view, it is a good indicator to look for and this is what the second part of the filter is doing. It looks for worksheets with these hidden attributes. 
 
 ```ruby
 MF_XLMHunter: if  (attachment-filename == "(?i)\\.(xls|xlsb|xlsm|xltm|xlsx)$"){
