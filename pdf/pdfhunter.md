@@ -1,7 +1,8 @@
 # PDFHunter 
 
-As a popular and widely trusted extension, PDF is still on the radar of malicious actors. PDF is a feature-rich, and well-documented format effective to download and execute malware, steal credentials, or transport other malicious documents like macro-enabled MS Office files.
+As a popular and widely "trusted" extension, PDF is still on the radar of malicious actors. PDF is a feature-rich, and well-documented format effective to download and execute malware, steal credentials, or transport other malicious documents like macro-enabled MS Office files.
 
+Basically every piece of information is stored in object. 
 
 ```ruby
 MF_PDFSuspKeys: if (attachment-filename == "(?i)\\.(pdf)$") AND (attachment-binary-contains("(?i)/(OpenAction|Javascript|Launch|EmbeddedFile|AcroForm)")) {
@@ -10,7 +11,7 @@ MF_PDFSuspKeys: if (attachment-filename == "(?i)\\.(pdf)$") AND (attachment-bina
 }
 ```
 
-It's simple to read but has some limitations. First, PDF supports Names Object with hexadecimal or literal characters. This condition operates only on literal characters. Hopefully, Names are case-sensitive so we need to cover only one set of characters in hex. Second, it evaluates to true on the first match which does not give us full visibility in logs.
+The above version of the filter is simple to read but has some limitations. First, PDF supports Names Object with hexadecimal or literal characters. This condition operates only on literal characters. Hopefully, Names are case-sensitive so we need to cover only one set of characters in hex. Second, it evaluates to true on the first match which does not give us full visibility in logs.
 
 The sample file that triggers a below log entry might include other keywords but the rule stops at the first match:
 
