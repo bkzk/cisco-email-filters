@@ -1,8 +1,9 @@
 # PDFHunter 
 
-As a popular and widely "trusted" extension, PDF is still on the radar of malicious actors. PDF is a feature-rich, and well-documented format effective to download and execute malware, steal credentials, or transport other malicious documents like macro-enabled MS Office files.
+As a popular and widely "trusted" extension by a general user, PDF is still on the radar of malicious actors. PDF is a feature-rich, and well-documented format effective to download and execute malware, steal credentials, or transport other malicious documents like macro-enabled MS Office files.
 
-Basically every piece of information is stored in object. 
+Basically every piece of information is stored in objects. Name objects in a PDF document are used to provide a mapping between human-readable names and objects within the document. The Names are also used by builtin actions and functions like /OpenAction or /Lunch that are known to be used in PDF-based attack scenarios.  
+
 
 ```ruby
 MF_PDFSuspKeys: if (attachment-filename == "(?i)\\.(pdf)$") AND (attachment-binary-contains("(?i)/(OpenAction|Javascript|Launch|EmbeddedFile|AcroForm)")) {
@@ -11,9 +12,9 @@ MF_PDFSuspKeys: if (attachment-filename == "(?i)\\.(pdf)$") AND (attachment-bina
 }
 ```
 
-The above version of the filter is simple to read but has some limitations. First, PDF supports Names Object with hexadecimal or literal characters. This condition operates only on literal characters. Hopefully, Names are case-sensitive so we need to cover only one set of characters in hex. Second, it evaluates to true on the first match which does not give us full visibility in logs.
+The above filter is simple to read but has some limitations. First, PDF supports Names Object with hexadecimal or literal characters. This condition operates only on literal characters. Hopefully, Names are case-sensitive, so we need to cover only one set of characters in hex. Second, it evaluates to true on the first match. It doesn't give us full visibility in the logs. Mathing on a single Name objects is also subject of false positive. 
 
-The sample file that triggers a below log entry might include other keywords but the rule stops at the first match:
+The sample file that triggers a below log entry can include other keywords but the rule stops at the first match:
 
 ```
 Info: MID 140173 Custom Log Entry: MF-PDFSuspKeys: 'sample1-6a06f.pdf, /OpenAction' string found!
