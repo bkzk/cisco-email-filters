@@ -7,13 +7,28 @@ These filters are not a replacement for any AV or AMP engine but they can enhanc
 Filters are usually tested only with a limited number of samples in the lab and may be a subject of false positives as well as false negatives. Before you consider committing any of the filters in production you should first perform your own tests.
 
 
-Examples of message filters looking for indicators of document-based threats
+Examples of message filters looking for indicators of:
 
-- [VBA Hunter](vba/vbahunter.md) filters looking for indicators of VBA macros inside MS Office files
+- __Document-based threats__
 
-- [XLM Hunter](xlm/xlmhunter.md) filters looking for indicators of XLM - Excel4.0 macros inside MS Office files
+    - [VBA Hunter](vba/vbahunter.md) filters looking for indicators of VBA macros inside MS Office files
 
-- [PDF Hunter](pdf/pdfhunter.md) filters looking for suspicious PDF object names (keywords)
+    - [XLM Hunter](xlm/xlmhunter.md) filters looking for indicators of XLM - Excel4.0 macros inside MS Office files
+
+    - [PDF Hunter](pdf/pdfhunter.md) filters looking for suspicious PDF object names (keywords)
+
+    - [OneNote Hunter](one/onenote.md) filters looking for suspicious OneNote documents and embedded files
+
+- __Scripts__
+
+    - [JSHunter](scripts/jshunter.md) detecting JavaScript code
+
+- __Specific threats__
+
+    - [CVE-2023-23397](cve/CVE-2023-23397.md) 
+
+
+Other: 
 
 -  [Building Score-based Filters](ScoringFilters.md) example of using different components to build a scoring filter
 
