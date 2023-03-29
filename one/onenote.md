@@ -189,10 +189,14 @@ Results:
 
 #### 59d4cf6a9c26bdb1fdfaf38135b591594b5a8f27b570f21d1676dcdf095ba32b
 ```log
-ś0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00#@~^+gMAAA=='
+ Wed Mar 29 09:26:52 2023 Info: MID 110 attachment '59d4cf6a9c26bdb1fdfaf38135b591594b5a8f27b570f21d1676dcdf095ba32b.one'
+ Wed Mar 29 09:26:52 2023 Info: ICID 67 close
+ Wed Mar 29 09:26:52 2023 Info: MID 110 Custom Log Entry: OneNoteHunter: Attachment is OneNote document
+ Wed Mar 29 09:26:52 2023 Info: MID 110 Custom Log Entry: OneNoteHunter: Onenote includes embedded files
+ Wed Mar 29 09:26:52 2023 Info: MID 110 Custom Log Entry: OneNoteHunter: Onenote embeds PE or JSE/VBE script: '59d4cf6a9c26bdb1fdfaf38135b591594b5a8f27b570f21d1676dcdf095ba32b.one, \xef\xbf\xbd\x16\xef\xbf\xbd\xef\xbf\xbde&\x11E\xef\xbf\xbd\xef\xbf\xbd\xef\xbf\xbdM\x0bz\xef\xbf\xbd\xef\xbf\xbd, \xef\xbf\xbd\x16\xef\xbf\xbd\xef\xbf\xbde&\x11E\xef\xb \xbd\xef\xbf\xbd\xef\xbf\xbdM\x0bz\xef\xbf\xbd\xef\xbf\xbd\x12\x04\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00#@~^+gMAAA=='
  ```
 
-#### b58d332effebce32e00cc254be8561388082e2cdab140fe538bdc3d3ba7f5dcc.one (JSE/VBE with #!~^)
+#### b58d332effebce32e00cc254be8561388082e2cdab140fe538bdc3d3ba7f5dcc.one
 
 ```log 
 Fri Mar 24 13:52:11 2023 Info: MID 37 attachment 'b58d332effebce32e00cc254be8561388082e2cdab140fe538bdc3d3ba7f5dcc.one'
@@ -350,12 +354,10 @@ Try to use it together with [JSHunter](../scripts/jshunter.md).
  Wed Mar 29 09:35:12 2023 Info: MID 118 Custom Log Entry: JSHUnter: JSScript indicator found: 'function orhBuE6V(, function $PXFL(, function L3ZC('
  Wed Mar 29 09:35:12 2023 Info: MID 118 Custom Log Entry: JSHUnter: JSScript indicator found: 'function orhBuE6V(, function $PXFL(, function L3ZC(, var Bslfjd =, var qXuWH =, var d8G ='
  Wed Mar 29 09:35:12 2023 Info: MID 118 Custom Log Entry: JSHUnter: JSScript indicator found: 'function orhBuE6V(, function $PXFL(, function L3ZC(, var Bslfjd =, var qXuWH =, var d8G =, replace(, replace('
-
- Wed Mar 29 09:35:12 2023 Info: MID 118 Custom Log Entry: JSHUnterP: JSScript indicator(s) found: 'function orhBuE6V(, function $PXFL(, function L3ZC('
 ```
 
 
-### Perf Tests
+## Perf Tests
 
 Comparing times between `OneNoteHunter`, `OneNoteHunterSmpl`, and optimized `OneNoteHunterP`. 
 
