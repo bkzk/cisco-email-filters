@@ -184,7 +184,7 @@ Tue Mar 28 15:36:14 2023 Info: MID 87 Custom Log Entry: JSHUnter: JSScript indic
 Tue Mar 28 15:36:14 2023 Info: MID 87 Custom Log Entry: JSHUnterP: JSScript indicator(s) found: 'var hello =, var co tent =, var body ='
 ```
 
-Note the difference between `JSHunter` and `JSHunterP`. The second stops on first match becors of OR comparision operator. 
+
 
 ## Testbed
 
