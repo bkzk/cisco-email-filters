@@ -25,7 +25,8 @@ Examples of message filters looking for indicators of:
 
 - __Specific threats__
 
-    - [CVE-2023-23397](cve/CVE-2023-23397.md) 
+    - [CVE-2023-23397](cve/CVE-2023-23397.md)
+    - [CVE-2023-36884](cve/CVE-2023-36884.md) 
 
 
 Other: 
